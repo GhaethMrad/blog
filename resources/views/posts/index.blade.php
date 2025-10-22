@@ -26,12 +26,16 @@
                                 <td class="p-[10px] text-center text-white text-[18px] border-[1px] border-[#eee]">{{ $blog->user->name }}</td>
                                 <td class="p-[10px] text-center text-white text-[18px] border-[1px] border-[#eee]">
                                     <div class="flex items-center justify-center">
+                                        @auth
+                                        @if ($blog->user->id == auth()->id())
                                         <form id="delete-post" action="{{ route("posts.destroy", $blog->id) }}" method="POST">
                                             @csrf
                                             @method("DELETE")
                                             <input class="bg-red-500 cursor-pointer px-[20px] py-[10px] duration-300 hover:bg-red-600" type="submit" value="Delete">
                                         </form>
                                         <a class="bg-blue-500 px-[20px] py-[10px] duration-300 hover:bg-blue-600" href="{{ route("posts.edit", $blog->id) }}">Edit</a>
+                                        @endif
+                                        @endauth
                                         <a class="bg-green-500 px-[20px] py-[10px] duration-300 hover:bg-green-600" href="{{ route("posts.show", $blog->id) }}">Show</a>
                                     </div>
                                 </td>
@@ -51,7 +55,7 @@
                 text: @json(session('success')),
                 showConfirmButton: false,
                 timer: 3000
-            });
+            })
         });
     </script>
     @endif

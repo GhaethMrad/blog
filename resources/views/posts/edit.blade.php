@@ -4,7 +4,16 @@
 
 @section("content")
 <h2 class="w-fit mx-auto text-[35px] font-bold text-green-500 capitalize mt-[50px]">Edit The Post {{ $post->id }}</h2>
-<div class="flex justify-center items-center my-[50px]">
+<div class="flex flex-col gap-[30px] justify-center items-center my-[50px]">
+     @if ($errors->any())
+            <div class="bg-red-600/50 p-[40px] w-full md:w-[50%]">
+                <ul class="list-disc">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
     <form class="w-full flex flex-col gap-[20px] bg-[#222] p-[30px] rounded-3xl md:w-[50%]" action="{{ route("posts.update", $post->id) }}" method="POST">
         @csrf
         @method("PUT")

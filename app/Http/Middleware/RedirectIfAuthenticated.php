@@ -4,9 +4,10 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class AuthMiddleware
+class RedirectIfAuthenticated
 {
     /**
      * Handle an incoming request.
@@ -15,9 +16,9 @@ class AuthMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (session()->has("user_id")) {
-            return $next($request);
+        if (Auth::check()) {
+            return redirect()->route("posts.index");
         }
-        return to_route("login");
+        return $next($request);
     }
 }

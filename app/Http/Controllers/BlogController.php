@@ -3,17 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Http\Middleware\AuthMiddleware;
+use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\UpdatePostRequest;
 use App\Models\Blog;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class BlogController extends BaseController
 {
 
     public function __construct() {
-        $this->middleware(AuthMiddleware::class)->except(['index', 'show']);
+        $this->middleware("auth")->except(['index', 'show']);
     }
     /**
      * Display a listing of the resource.
@@ -34,35 +36,17 @@ class BlogController extends BaseController
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StorePostRequest $request)
     {
-            $user = User::where("name", $request->username)->first();
-
-            $validated = $request->validate([
-                'username' => 'required',
-                'password' => "required",
-                'title' => 'required',
-                'desc' => 'required',
-            ]);
-
             $new_blog = new Blog([
-                'username' => $validated['username'],
-                'password' => $validated["password"],
-                'title' => $validated['title'],
-                'desc' => $validated['desc'],
-                'user_id' => $user->id,
+                'username' => Auth::user()->name,
+                'title' => $request->title,
+                'desc' => $request->desc,
+                'user_id' => Auth::id(),
             ]);
-
-            if (Hash::check($validated["password"], $user->password)) {
-                $new_blog->save();
-                return redirect()->route('posts.index')->with("success", "Item created successfully!");
-            } else {
-                return back()->withErrors([
-                    "password" => "The User Password Is Not True",
-                ])->withInput();
-            }
-
-    } 
+            $new_blog->save();
+            return redirect()->route('posts.index')->with('success', 'Item created successfully!');
+} 
 
     /**
      * Display the specified resource.
@@ -83,20 +67,13 @@ class BlogController extends BaseController
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Blog $post)
+    public function update(UpdatePostRequest $request, Blog $post)
     {
-        $validated = $request->validate([
-            'title' => 'required',
-            'desc' => 'required',
-        ]);
-
         $post->update([
-            "title" => $validated["title"],
-            "desc" => $validated["desc"]
+            "title" => $request->title,
+            "desc" => $request->desc
         ]);
-
         $post->save();
-
         return redirect()->route('posts.index')->with("success", "Item updated successfully!");
     }
 

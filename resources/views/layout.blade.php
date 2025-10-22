@@ -14,11 +14,8 @@
             <h1 class="logo text-blue-500 font-bold text-[25px]">Blog</h1>
             <div class="flex items-center gap-[10px]">
                 <a class="text-blue-500 text-[20px] font-bold" href="{{ route("posts.index") }}">All Posts</a>
-                @if (session()->has("user_id"))
-                    @php
-                        $user = \App\Models\User::find(session("user_id"));
-                    @endphp
-                    <p class="text-[18px] text-green-500 font-bold">Hello <span>{{ $user->name }}</span></p>
+                @if (auth()->user())
+                    <p class="text-[18px] text-green-500 font-bold">Hello <span>{{ auth()->user()->name }}</span></p>
                     <form action="{{ route("logout") }}" method="POST">
                         @csrf
                         <input class="bg-red-500 text-white py-[7px] px-[20px] cursor-pointer duration-300 hover:bg-red-600" type="submit" value="Logout">

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Http\Requests\LoginRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -13,19 +13,11 @@ class LoginController extends Controller
         return view("auth.login");
     }
 
-    public function login(Request $request) {
-        $validated = $request->validate([
-            "username" => "required",
-            "password" => "required",
-        ]);
-
-        $user = User::where("name", $validated["username"])->first();
-
-        if (!$user || !Hash::check($validated["password"], $user->password)) {
-            return back()->withErrors(['error' => 'The Username or password is failed'])->withInput();
+    public function login(LoginRequest $request) {
+        if (Auth::attempt(["name" => $request->username, "password" => $request->password])) {
+            $request->session()->regenerate();
+            return to_route("posts.index");
         }
-
-        session(["user_id" => $user->id]);
-        return to_route("posts.index");
+        return back()->withErrors(['error' => 'The Username or password is failed'])->withInput();
     }
 }
