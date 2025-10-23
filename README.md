@@ -110,21 +110,4 @@ php artisan key:generate</code></pre>
 
 <hr/>
 
-<h2>Notes</h2>
-<p>
-  I generated this README after reading the repository structure (some GitHub pages returned a loading error during inspection). I intentionally listed only features I could verify from the repository layout and core files. 
-  If you want the README to include concrete feature details (for example: "Post CRUD", "Admin panel", "User authentication", or exact package names), please either:
-</p>
-<ol>
-  <li>Make the repository fully accessible (ensure raw file access) or</li>
-  <li>Upload a ZIP of the project here — then I will scan files and replace general statements with exact confirmed features (controllers, models, routes, composer & npm packages, migrations, etc.).</li>
-</ol>
-
-<hr/>
-
-<p align="center">Made with ❤️ — If you want, I can now:</p>
-<ul>
-  <li>Replace placeholders with exact package names and route list (after full file access).</li>
-  <li>Add a quick "Usage examples" section showing sample curl requests or screenshots.</li>
-  <li>Convert this HTML to a nicely formatted Markdown version if you prefer plain Markdown.</li>
-</ul>
+<p align="center">Made with GhaethMrad❤️</p>
